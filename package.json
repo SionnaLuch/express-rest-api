@@ -10,6 +10,6 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
-    "nodemon": "npx nodemon server.js"
+    "start": "npx nodemon server.js"
   }
 }
