@@ -19,20 +19,24 @@ router.route('/seats').post((req, res) => {
     client: req.body.client,
     email: req.body.email,
   };
-  db.seats.push(newData);
-  return res.json({message: 'OK'});
+  if(db.seats.some(checkSeat => (checkSeat.day === req.body.day && checkSeat.seat === req.body.seat))) {
+    return res.status(404).json({ message: "The slot is already taken..." });
+  } else {
+    db.seats.push(newData);
+    return res.json({message: 'Reserved complete'});
+  }
 });
 
 router.route('/seats/:id').delete((req, res) => {
-  const deletedSeats = db.seats.filter((item) => item.id == req.params.id);
+  const deletedSeats = db.seats.filter((item) => item.id === req.params.id);
   const indexOfSeats = db.seats.indexOf(deletedSeats);
   db.seats.splice(indexOfSeats, 1);
   return res.json({message: 'OK'});
 });
 
 router.route('/seats/:id').put((req, res) => {
-  const editedSeats = db.seats.filter((item) => item.id == req.params.id);
-  const indexOfSeats= db.seats.filter((item) => item.id == req.params.id);
+  const editedSeats = db.seats.filter((item) => item.id === req.params.id);
+  const indexOfSeats= db.seats.filter((item) => item.id === req.params.id);
   const newSeats = {
     ...editedSeats,
     day: req.body.day,
